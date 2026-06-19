@@ -2,24 +2,17 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 /**
- * Smooth scrolling (Lenis) synced to GSAP ScrollTrigger.
- *
- * Lenis is driven off the GSAP ticker (not its own rAF) and pushes every scroll
- * into `ScrollTrigger.update`, so pinned/scrubbed timelines stay perfectly in
- * step with the smoothed scroll position. Skipped entirely under reduced motion
- * (ScrollTrigger then falls back to native scroll). Also smooth-scrolls in-page
- * hash links.
+ * Smooth scrolling (Lenis) on its own requestAnimationFrame loop. Skipped
+ * entirely under reduced motion (native scroll takes over). Also smooth-scrolls
+ * same-page hash links.
  */
 export function useLenis() {
   const prefersReduced = usePrefersReducedMotion();
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
     if (prefersReduced) return;
 
     const lenis = new Lenis({
@@ -28,11 +21,13 @@ export function useLenis() {
       smoothWheel: true,
     });
 
-    // keep ScrollTrigger in lockstep with Lenis
-    lenis.on("scroll", ScrollTrigger.update);
-    const tick = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
+    // drive Lenis off the browser's rAF (native rAF passes time in ms)
+    let rafId = 0;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
 
     // smooth-scroll for same-page hash links
     const onClick = (event: MouseEvent) => {
@@ -51,7 +46,7 @@ export function useLenis() {
 
     return () => {
       document.removeEventListener("click", onClick);
-      gsap.ticker.remove(tick);
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, [prefersReduced]);
