@@ -33,6 +33,8 @@ export interface Mushroom {
   benefit: string;
   /** One-line description. */
   note: string;
+  /** Optional photo used as a subtle card background, in /public. */
+  image?: string;
 }
 
 export interface Testimonial {

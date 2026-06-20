@@ -33,6 +33,20 @@ export function TheBlend() {
         {mushrooms.map((m, i) => (
           <RevealItem key={m.id}>
             <article className="group relative h-full overflow-hidden rounded-3xl border border-line bg-base/60 p-7 transition-colors hover:border-accent/40">
+              {/* mushroom photo background (subtle) + legibility scrim */}
+              {m.image && (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={m.image}
+                    alt=""
+                    aria-hidden
+                    loading="lazy"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-35 transition-all duration-500 group-hover:scale-105 group-hover:opacity-55"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-base via-base/85 to-base/45" />
+                </>
+              )}
               {/* index watermark */}
               <span className="pointer-events-none absolute -right-1 -top-5 text-[6rem] font-extrabold leading-none text-white/[0.04]">
                 {String(i + 1).padStart(2, "0")}
