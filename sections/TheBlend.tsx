@@ -32,8 +32,9 @@ export function TheBlend() {
       <Reveal stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {mushrooms.map((m, i) => (
           <RevealItem key={m.id}>
-            <article className="group relative h-full overflow-hidden rounded-3xl border border-line bg-base/60 p-7 transition-colors hover:border-accent/40">
-              {/* mushroom photo background (subtle) + legibility scrim */}
+            <article className="group relative h-full overflow-hidden rounded-3xl border border-line bg-base/60 p-7 transition-colors [text-shadow:0_1px_14px_rgba(8,4,20,0.85)] hover:border-accent/40">
+              {/* mushroom photo background + legibility scrim (dark gradient
+                  bottom-heavy so the copy stays readable over any photo) */}
               {m.image && (
                 <>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -42,8 +43,11 @@ export function TheBlend() {
                     alt=""
                     aria-hidden
                     loading="lazy"
-                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-35 transition-all duration-500 group-hover:scale-105 group-hover:opacity-55"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-45 transition-all duration-500 group-hover:scale-105 group-hover:opacity-60"
                   />
+                  {/* purple tint to keep photos on-brand */}
+                  <div className="pointer-events-none absolute inset-0 bg-accent-deep/20 mix-blend-multiply" />
+                  {/* darkening scrim for legibility */}
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-base via-base/85 to-base/45" />
                 </>
               )}
