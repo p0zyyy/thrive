@@ -33,9 +33,9 @@ export function TheBlend() {
         {mushrooms.map((m, i) => (
           <RevealItem key={m.id}>
             <article className="group relative flex h-full min-h-[19rem] flex-col justify-end overflow-hidden rounded-3xl border border-line bg-base/60 p-7 transition-colors [text-shadow:0_2px_16px_rgba(5,2,15,0.95)] hover:border-accent/40">
-              {/* mushroom photo background (prominent) + legibility scrim. The
-                  scrim is bottom-heavy so the photo reads clearly up top while
-                  the copy stays legible over the darkened lower half. */}
+              {/* full-strength mushroom photo; darkening is confined to the
+                  bottom (behind the copy) so the photo stays crisp up top while
+                  the text stays readable over a near-solid base. */}
               {m.image && (
                 <>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -44,12 +44,10 @@ export function TheBlend() {
                     alt=""
                     aria-hidden
                     loading="lazy"
-                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  {/* faint purple tint to keep photos on-brand */}
-                  <div className="pointer-events-none absolute inset-0 bg-accent-deep/10 mix-blend-multiply" />
-                  {/* darkening scrim for legibility (solid at the base) */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-base via-base/75 to-base/10" />
+                  {/* darkening scrim only behind the copy */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-base via-base/80 via-40% to-transparent to-80%" />
                 </>
               )}
               {/* index watermark */}
